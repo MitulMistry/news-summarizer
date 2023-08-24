@@ -20,7 +20,7 @@ class NewsInterface:
 
     @classmethod
     def get_articles_by_source(self, source="abc-news", count=5):
-        payload = {"source": source, "apiKey": self.api_key}
+        payload = {"sources": source, "apiKey": self.api_key}
         response = self.make_request("https://newsapi.org/v2/top-headlines", payload)        
         return self.process_response(response, count)
 

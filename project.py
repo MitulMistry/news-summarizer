@@ -10,7 +10,7 @@ def main():
         {"txt": "US headlines", "func": display_articles_by_country},
         {"txt": "Articles by country", "func": display_countries},
         {"txt": "Articles by source", "func": display_sources},
-        {"txt": "Search for articles", "func": get_search_input},
+        {"txt": "Search for articles", "func": display_articles_by_search},
     ]
 
     create_numeric_input_loop(options)
@@ -54,26 +54,59 @@ def display_articles_by_country(country="us"):
 
 def display_countries():
     countries = [
-        "au,Australia", "br,Brazil", "ca,Canada", "de,Germany",
-        "fr,France", "gb,Great Britain", "in,India", "it,Italy",
-        "jp,Japan", "mx,Mexico"
+        ("au", "Australia"), ("br", "Brazil"), ("ca", "Canada"), ("de", "Germany"),
+        ("fr", "France"), ("gb", "Great Britain"), ("in", "India"), ("it", "Italy"),
+        ("jp", "Japan"), ("mx", "Mexico")
     ]
 
-    options = {}
+    options = []
 
-    for country in countries:
-        code, txt = country.split(",")
+    for code, txt in countries:
         options.append({"txt": txt, "func": display_articles_by_country, "args": [code]})
 
-    create_numeric_input_loop(options)    
+    create_numeric_input_loop(options)
+
+
+def display_articles_by_source(source="abc-news"):
+    articles = NewsInterface.get_articles_by_source(source)
+    display_articles(articles)
 
 
 def display_sources():
-    ...
+    sources = [
+        ("abc-news", "ABC News"), ("ars-technica", "Ars Technica"),
+        ("associated-press", "Associated Press"), ("bloomberg", "Bloomberg"),
+        ("cbc-news", "CBC News"), ("cnn", "CNN"), ("espn", "ESPN"),
+        ("fortune", "Fortune"), ("national-geographic", "National Geographic"),
+        ("politico", "Politico"),
+    ]
+
+    options = []
+
+    for code, txt in sources:
+        options.append({"txt": txt, "func": display_articles_by_source, "args": [code]})
+
+    create_numeric_input_loop(options)
 
 
 def get_search_input():
-    ...
+    while (True):
+        try:
+            str = input("Enter a search term up to 30 characters: ")
+            str = str.strip().lower()
+
+            if len(str) == 0 or len(str) > 30: raise ValueError
+            break
+        except:        
+            print("Invalid entry. Try again.")
+    
+    return str
+
+
+def display_articles_by_search():
+    search_str = get_search_input()
+    articles = NewsInterface.get_articles_by_search(search_str)
+    display_articles(articles)
 
 
 def process_cli_args():
