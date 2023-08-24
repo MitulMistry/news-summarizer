@@ -4,31 +4,76 @@ import sys
 from classes.news_interface import NewsInterface 
 
 def main():
-    settings = process_cli_args()
+    settings = process_cli_args()    
 
-    news = NewsInterface()    
+    options = [
+        {"txt": "US headlines", "func": display_articles_by_country},
+        {"txt": "Articles by country", "func": display_countries},
+        {"txt": "Articles by source", "func": display_sources},
+        {"txt": "Search for articles", "func": get_search_input},
+    ]
 
-    choice = 1
+    create_numeric_input_loop(options)
 
+
+def create_numeric_input_loop(options):
     while (True):
-        if choice == 0:
+        print_options(options)
+        choice = get_choice()
+
+        if choice == None:
+            break
+        
+        elif choice == 0:
             sys.exit("Exiting program...")
 
-        elif choice == 1:
-            options = [
-                "US headlines",
-                "Articles by country",
-                "Articles by source",
-                "Search for articles",
-            ]
+        elif 0 < choice <= len(options):
+            option = options[choice - 1]
 
-            print_options(options)
-
-            choice = get_choice()
+            # Assign empty list for arguments if no arguments present.
+            # Use *args to unpack arguments to be used in function call.
+            args = option["args"] if ("args" in option) else []
+            option["func"](*args)
         
         else:
             print("Invalid entry. Try again.\n")
-            choice = 1
+
+
+def display_articles(articles):
+    print(articles)
+
+
+def summarize_article(url):
+    ...
+
+
+def display_articles_by_country(country="us"):
+    articles = NewsInterface.get_articles_by_country(country)
+    display_articles(articles)
+
+
+def display_countries():
+    countries = [
+        "au,Australia", "br,Brazil", "ca,Canada", "de,Germany",
+        "fr,France", "gb,Great Britain", "in,India", "it,Italy",
+        "jp,Japan", "mx,Mexico"
+    ]
+
+    options = {}
+
+    for country in countries:
+        code, txt = country.split(",")
+        options.append({"txt": txt, "func": display_articles_by_country, "args": [code]})
+
+    create_numeric_input_loop(options)    
+
+
+def display_sources():
+    ...
+
+
+def get_search_input():
+    ...
 
 
 def process_cli_args():
@@ -58,9 +103,10 @@ def print_options(options):
     print("Pick an option (number):")
 
     for i in range(len(options)):
-        print(f"{i + 1}. {options[i]}")
+        text = options[i]["txt"] if type(options[i]) == dict else options[i]
+        print(f"{i + 1}. {text}")
 
-    print("Type 0 to exit")
+    print("Type 0 to exit. Type nothing to go to previous menu.")
 
 
 if __name__ == "__main__":
