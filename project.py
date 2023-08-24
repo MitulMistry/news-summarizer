@@ -1,15 +1,18 @@
 import argparse
 import sys
 
+from classes.news_interface import NewsInterface 
+
 def main():
     settings = process_cli_args()
+
+    news = NewsInterface()    
 
     choice = 1
 
     while (True):
         if choice == 0:
-            print("Exiting program...")
-            break
+            sys.exit("Exiting program...")
 
         elif choice == 1:
             options = [
