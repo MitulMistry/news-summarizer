@@ -14,22 +14,25 @@ def main():
         {"txt": "Search for articles", "func": display_articles_by_search},
     ]
 
-    create_numeric_input_loop(options)
+    create_numeric_input_loop(options, True)
 
 
-def create_numeric_input_loop(options):
+def create_numeric_input_loop(options, start=False):
     while (True):
-        print_options(options)
+        print_options(options, start)
         choice = get_choice()
+        print() # Print a newline
 
-        if choice == None:
+        # -1 means user pressed enter with no input: go to previous menu
+        if choice == -1 and not start:
             break
         
+        # 0 means exit the program
         elif choice == 0:
             sys.exit("Exiting program...")
 
+        # Within range of options, so select that option
         elif 0 < choice <= len(options):
-            print() # Print a newline
             option = options[choice - 1]
 
             # Assign empty list for arguments if no arguments present.
@@ -37,8 +40,9 @@ def create_numeric_input_loop(options):
             args = option["args"] if ("args" in option) else []
             option["func"](*args)
         
+        # Input was out of range or not a number, so retry
         else:
-            print("Invalid entry. Try again.\n")
+            print("Invalid entry. Try again.")
 
 
 def display_articles(articles):
@@ -138,21 +142,27 @@ def process_cli_args():
 
 def get_choice(description="Choice: "):
     str = input(description).strip()
+    
+    # Return -1 if Enter was pressed with no input
+    if (str == ""): return -1
 
     try:
         return(int(str))
     except ValueError:
-        return None
+        # Return infinity if invalid input so it can still be used in
+        # numerical comparison (like <) while being out of range (invalid)
+        return float("inf")
 
 
-def print_options(options):
+def print_options(options, start=False):
     print("Pick an option (number):")
 
     for i in range(len(options)):
         text = options[i]["txt"] if type(options[i]) == dict else options[i]
         print(f"{i + 1}. {text}")
 
-    print("Type 0 to exit. Type nothing to go to previous menu.")
+    prev_str = " Type nothing to go to previous menu." if not start else ""
+    print(f"Type 0 to exit.{prev_str}")
 
 
 if __name__ == "__main__":
