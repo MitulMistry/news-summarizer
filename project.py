@@ -1,7 +1,8 @@
 import argparse
 import sys
 
-from classes.news_interface import NewsInterface 
+from classes.news_interface import NewsInterface
+from classes.summary_interface import SummaryInterface
 
 def main():
     settings = process_cli_args()    
@@ -50,7 +51,13 @@ def display_articles(articles):
 
 
 def summarize_article(url):
-    print(url)
+    txtList = SummaryInterface.get_extractive_summary(url)
+
+    for txt in txtList:
+        print(txt)
+    
+    input("Press Enter to continue...")
+    print() # Print a newline
 
 
 def display_articles_by_country(country="us"):
