@@ -1,6 +1,8 @@
 certifi==2023.7.22
 charset-normalizer==3.2.0
 idna==3.4
+PyAudio==0.2.13
 python-dotenv==1.0.0
+pyttsx3==2.90
 requests==2.31.0
 urllib3==2.0.4

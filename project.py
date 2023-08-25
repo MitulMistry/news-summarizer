@@ -1,11 +1,16 @@
 import argparse
 import sys
+import pyttsx3
 
 from classes.news_interface import NewsInterface
 from classes.summary_interface import SummaryInterface
 
+# Use settings as a global variable so all functions can access it
+settings = {}
+tts_engine = {}
+
 def main():
-    settings = process_cli_args()    
+    initialize_settings()
 
     options = [
         {"txt": "US headlines", "func": display_articles_by_country},
@@ -15,6 +20,19 @@ def main():
     ]
 
     create_numeric_input_loop(options, True)
+    
+
+def initialize_settings():
+    global settings, tts_engine
+    settings = process_cli_args()
+    
+    # Configure text to speech engine
+    if settings["tts"]:
+        tts_engine = pyttsx3.init()
+
+        # Set the voice for text to speech engine    
+        voices = tts_engine.getProperty('voices')    
+        tts_engine.setProperty('voice', voices[3].id)
 
 
 def create_numeric_input_loop(options, start=False):
@@ -55,10 +73,16 @@ def display_articles(articles):
 
 
 def summarize_article(url):
-    txtList = SummaryInterface.get_extractive_summary(url)
+    global settings, tts_engine
+    
+    print("Loading summary...\n")
+    txtList = SummaryInterface.get_humanlike_summary(url)
 
     for txt in txtList:
+        if settings["tts"]: tts_engine.say(txt)
         print(txt)
+    
+    if settings["tts"]: tts_engine.runAndWait()
     
     input("Press Enter to continue...")
     print() # Print a newline
