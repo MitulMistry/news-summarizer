@@ -28,6 +28,7 @@ def create_numeric_input_loop(options):
             sys.exit("Exiting program...")
 
         elif 0 < choice <= len(options):
+            print() # Print a newline
             option = options[choice - 1]
 
             # Assign empty list for arguments if no arguments present.
@@ -40,11 +41,16 @@ def create_numeric_input_loop(options):
 
 
 def display_articles(articles):
-    print(articles)
+    options = []
+
+    for article in articles:
+        options.append({"txt": article["title"], "func": summarize_article, "args": [article["url"]]})
+    
+    create_numeric_input_loop(options)
 
 
 def summarize_article(url):
-    ...
+    print(url)
 
 
 def display_articles_by_country(country="us"):
@@ -56,7 +62,7 @@ def display_countries():
     countries = [
         ("au", "Australia"), ("br", "Brazil"), ("ca", "Canada"), ("de", "Germany"),
         ("fr", "France"), ("gb", "Great Britain"), ("in", "India"), ("it", "Italy"),
-        ("jp", "Japan"), ("mx", "Mexico")
+        ("jp", "Japan"), ("mx", "Mexico"),
     ]
 
     options = []
