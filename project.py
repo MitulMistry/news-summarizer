@@ -12,6 +12,8 @@ tts_engine = {}
 def main():
     initialize_settings()
 
+    # Define a list of dictionaries that represent the option to display
+    # and their functions to invoke if selected.
     options = [
         {"txt": "US headlines", "func": display_articles_by_country},
         {"txt": "Articles by country", "func": display_countries},
@@ -66,8 +68,14 @@ def create_numeric_input_loop(options, start=False):
 def display_articles(articles):
     options = []
 
+    # Create a list of dictionaries representing articles, the function to invoke
+    # when selected (summarize_article), and the url to pass to the function.
     for article in articles:
-        options.append({"txt": article["title"], "func": summarize_article, "args": [article["url"]]})
+        options.append({
+            "txt": article["title"],
+            "func": summarize_article,
+            "args": [article["url"]]
+        })
     
     create_numeric_input_loop(options)
 
@@ -75,10 +83,14 @@ def display_articles(articles):
 def summarize_article(url):
     global settings, tts_engine
     
+    # Make and API call using SummaryInterface to get the summary
+    # of the article at the provided URL.
     print("Loading summary...\n")
     txtList = SummaryInterface.get_humanlike_summary(url)
 
+    # The summary is provided as a list of strings.
     for txt in txtList:
+        # If text to speech is enabled, add the text to the tts queue.
         if settings["tts"]: tts_engine.say(txt)
         print(txt)
     
@@ -89,6 +101,7 @@ def summarize_article(url):
 
 
 def display_articles_by_country(country="us"):
+    # Make an API call using NewsInterface to get the articles to display.
     articles = NewsInterface.get_articles_by_country(country)
     display_articles(articles)
 
@@ -102,6 +115,8 @@ def display_countries():
 
     options = []
 
+    # Create a list of dictionaries representing countries, the function to invoke
+    # when selected, and the country code to pass to the function (for the API call).
     for code, txt in countries:
         options.append({"txt": txt, "func": display_articles_by_country, "args": [code]})
 
@@ -109,6 +124,7 @@ def display_countries():
 
 
 def display_articles_by_source(source="abc-news"):
+    # Make an API call using NewsInterface to get the articles to display.
     articles = NewsInterface.get_articles_by_source(source)
     display_articles(articles)
 
@@ -124,6 +140,8 @@ def display_sources():
 
     options = []
 
+    # Create a list of dictionaries representing sources, the function to invoke
+    # when selected, and the source code to pass to the function (for the API call).
     for code, txt in sources:
         options.append({"txt": txt, "func": display_articles_by_source, "args": [code]})
 
@@ -136,6 +154,7 @@ def get_search_input():
             str = input("Enter a search term up to 30 characters: ")
             str = str.strip().lower()
 
+            # Only allow query strings up to 30 characters.
             if len(str) == 0 or len(str) > 30: raise ValueError
             break
         except:        
