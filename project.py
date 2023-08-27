@@ -151,16 +151,22 @@ def display_sources():
 def get_search_input():
     while (True):
         try:
-            str = input("Enter a search term up to 30 characters: ")
+            str = input("Enter a search term up to 30 characters: ")            
             str = str.strip().lower()
-
+            
             # Only allow query strings up to 30 characters.
-            if len(str) == 0 or len(str) > 30: raise ValueError
-            break
+            if validate_search_input(str):
+                break
+            else:
+                raise ValueError
         except:        
             print("Invalid entry. Try again.")
     
     return str
+
+
+def validate_search_input(str):    
+    return 0 < len(str) <= 30
 
 
 def display_articles_by_search():
@@ -169,7 +175,8 @@ def display_articles_by_search():
     display_articles(articles)
 
 
-def process_cli_args():
+def process_cli_args(argv=None):
+    # Allow argv to be passed as an argument in order to facilitate testing
     settings = {}
 
     parser = argparse.ArgumentParser(
@@ -177,14 +184,19 @@ def process_cli_args():
     )
 
     parser.add_argument("-s", action="store_true", help="Enable text to speech")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     settings["tts"] = args.s
     return settings
 
 
 def get_choice(description="Choice: "):
-    str = input(description).strip()
+    str = input(description)
+    return process_choice(str)
+
+
+def process_choice(str):
+    str = str.strip()
     
     # Return -1 if Enter was pressed with no input
     if (str == ""): return -1
