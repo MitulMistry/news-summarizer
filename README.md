@@ -26,7 +26,7 @@ Since many of the loops use the same structure, the basic input loop was extract
 My goal was to integrate two different APIs into a unifed CLI experience. It made sense to me to separate the API interfaces into separate classes and encapsulate the external requests into associated methods. This allows easy access to external API data just by invoking class methods.
 
 ## Video Demo
-You can view a video demo of this application [here]().
+You can view a video demo of this application [here](https://www.youtube.com/watch?v=M-G4b_X9-fg).
 
 ## Commands
 `python project.py` - Run the application.
