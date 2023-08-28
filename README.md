@@ -14,7 +14,7 @@ News Summarizer is a command line tool used to access recent news articles and e
 
 [`classes/summary_interface.py`](/classes/summary_interface.py) - A class used to make API calls to [TLDRThis][tldr-this].
 
-[`test_project.py`](/project.py) - Tests for functions in `project.py`.
+[`test_project.py`](/test_project.py) - Tests for functions in `project.py`.
 
 [`requirements.txt`](/requirements.txt) - A list of dependencies used to build the application.
 
@@ -44,6 +44,9 @@ NEWS_API_KEY=...
 TLDR_API_KEY=...
 ```
 4. Run `python project.py` to start the application.
+
+## Tests
+Tests are written with [pytest](https://docs.pytest.org/) in the [`test_project.py`](/test_project.py) file. They can be run with the command: `python -m pytest test_project.py`
 
 ## API Info
 This application is powered by [News API][news-api] and [TLDRThis][tldr-this].

@@ -21,7 +21,7 @@ def main():
         {"txt": "Search for articles", "func": display_articles_by_search},
     ]
 
-    create_numeric_input_loop(options, True)
+    create_numeric_input_loop(options, start=True)
     
 
 def initialize_settings():
@@ -83,7 +83,7 @@ def display_articles(articles):
 def summarize_article(url):
     global settings, tts_engine
     
-    # Make and API call using SummaryInterface to get the summary
+    # Make an API call using SummaryInterface to get the summary
     # of the article at the provided URL.
     print("Loading summary...\n")
     txtList = SummaryInterface.get_humanlike_summary(url)
