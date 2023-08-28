@@ -51,7 +51,7 @@ class NewsInterface:
 
 
     @classmethod
-    def get_articles_by_search(self, search_str, count=5, days=7):
+    def get_articles_by_search(self, search_str, count=5, days=7, lang="en"):
         """
         Makes News API call based on a search query
 
@@ -61,6 +61,8 @@ class NewsInterface:
         :type count: int
         :param days: The number of days previous to today to include results for
         :type days: int
+        :param lang: The language of articles to include results for
+        :type lang: str
         :returns: A list of articles
         :rtype: list[dict]
         """
@@ -72,6 +74,10 @@ class NewsInterface:
             "sortBy": "popularity",
             "apiKey": self.api_key
         }
+        
+        # This enables possibility of setting lang to None, which means no language
+        # parameter will be added to payload, and all languages will be included.
+        if lang: payload["language"] = lang
 
         response = self.make_request("https://newsapi.org/v2/everything", payload)        
         return self.process_response(response, count)
